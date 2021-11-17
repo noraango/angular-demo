@@ -1,0 +1,10 @@
+.div-employee {
+  margin: 0 auto;
+  min-width: 400px;
+}
+.row:hover {
+  cursor: pointer;
+  border-top: 1px solid rgba(255,255,255,.12) !important;
+  transform: translate3d(-2.5px, -5px, 0);
+  z-index: 1;
+}

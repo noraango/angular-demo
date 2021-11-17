@@ -1,0 +1,53 @@
+<div *mobxAutorun class="div-employee" fxFlex.lt-sm="100" fxFlex.gt-xs="600px">
+  <p>
+    Total Salary: <span>{{ formatVND(totalSalary.toString()) }}đ</span>
+  </p>
+  <div>
+    <p>Highest salary employee</p>
+    <p>
+      Name: <span>{{ highestSalaryEmployee.name }}</span>
+    </p>
+    <p>
+      Salary: <span>{{ formatVND(highestSalaryEmployee.salary) }}</span>
+    </p>
+  </div>
+  <table class="mat-elevation-z8" mat-table [dataSource]="employees">
+    <!-- Index Column -->
+    <ng-container matColumnDef="#">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Salary Column -->
+    <ng-container matColumnDef="Salary">
+      <th class="col-num" mat-header-cell *matHeaderCellDef>Salary</th>
+      <td class="col-num" mat-cell *matCellDef="let element">
+        {{ formatVND(element.salary.toString()) }}đ
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayCols"></tr>
+    <tr
+      class="row"
+      mat-row
+      *matRowDef="let row; columns: displayCols"
+      (click)="onRowClick(row)"
+    ></tr>
+  </table>
+  <mat-paginator
+    (page)="handlePageEvent($event)"
+    [length]="length"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="pageIndex"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>
