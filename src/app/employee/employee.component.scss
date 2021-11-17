@@ -2,9 +2,9 @@
   margin: 0 auto;
   min-width: 400px;
 }
-.row:hover {
+.row:hover td{
   cursor: pointer;
-  border-top: 1px solid rgba(255,255,255,.12) !important;
+  border-top: 1px solid rgba(255,255,255,.12);
   transform: translate3d(-2.5px, -5px, 0);
-  z-index: 1;
+  background: #424242;
 }

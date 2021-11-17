@@ -1,1 +1,21 @@
-<p>edit-dialog works!</p>
+<div class="dialog-employee" fxLayout="column" fxLayoutGap="20px">
+  <div fxLayout="row" dir="rtl">
+    <button mat-raised-button (click)="onAction('')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div fxLayout="column">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [(ngModel)]="data.name" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Salary</mat-label>
+      <input matInput type="text" [(ngModel)]="data.salary" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutGap="20px" dir="rtl">
+    <button mat-raised-button (click)="onAction('delete')">Delete</button>
+    <button mat-raised-button (click)="onAction('update')">Update</button>
+  </div>
+</div>

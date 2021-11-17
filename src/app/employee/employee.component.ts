@@ -4,11 +4,7 @@ import { computed, observable } from 'mobx-angular';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { FormatService } from 'src/app/services/format.service';
 import { Employee } from 'src/models/Employee';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 
 @Component({
@@ -18,12 +14,12 @@ import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 })
 export class EmployeeComponent implements OnInit {
   //Data Table
-  displayCols: string[] = ['#', 'Name', 'Salary'];
+  displayCols: string[] = ['Name', 'Salary'];
   @observable employees: Employee[] = [];
   @computed get totalSalary() {
-    let sum = 0;
+    let sum: number = 0;
     this.employees.forEach((e) => {
-      sum += e.salary;
+      sum += Number(e.salary);
     });
     return sum;
   }
@@ -61,8 +57,30 @@ export class EmployeeComponent implements OnInit {
     this.retrieveEmployees();
   }
 
-  formatVND(value: any) {
+  formatVND(value: number) {
     return this._formatService.formatVND(value.toString());
+  }
+
+  //Open dialog
+  onRowClick(item: Employee) {
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      data: {
+        id: item.id,
+        name: item.name,
+        salary: item.salary,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      switch (result.event) {
+        case 'update':
+          this.updateEmployee(result.data);
+          break;
+        case 'delete':
+          this.deleteEmployee(result.data);
+          break;
+      }
+    });
   }
 
   //Fetch employee data
@@ -75,21 +93,14 @@ export class EmployeeComponent implements OnInit {
     this.length = res.length;
   }
 
-  //Open dialog
-  onRowClick(item: Employee) {
-    console.log(item);
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      width: '500px',
-      data: {
-        id: item.id,
-        name: item.name,
-        salary: item.salary,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed!!');
-    });
+  updateEmployee(item: Employee) {
+    this._employeeService.updateEmployee(item);
+    this.retrieveEmployees();
+  }
+  
+  deleteEmployee(item: Employee) {
+    this._employeeService.deleteEmployee(item.id);
+    this.retrieveEmployees();
   }
 
   //Pagination event handler

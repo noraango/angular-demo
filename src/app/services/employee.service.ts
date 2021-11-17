@@ -26,15 +26,10 @@ export class EmployeeService {
     };
     let data: Employee[] = JSON.parse(localStorage.getItem(key) ?? '');
     result.length = data.length;
-    // result.totalSalary = 0;
-    // result.highestSalaryEmployee = data[0];
-    // data.forEach((e) => {
-    //   if (e.salary! > result.highestSalaryEmployee!.salary!) {
-    //     result.highestSalaryEmployee = e;
-    //   }
-    //   result.totalSalary += e.salary!;
-    // });
     result.data = data.splice(pageIndex * pageSize, pageSize);
+    if (result.data.length === 0 && pageIndex > 0) {
+      result.data = data.splice(--pageIndex * pageSize, pageSize);
+    }
     return result;
   }
 
@@ -43,6 +38,13 @@ export class EmployeeService {
     let employee = employees.find((x) => x.id == item.id);
     employee!.name = item.name;
     employee!.salary = item.salary;
+    localStorage.setItem(key, JSON.stringify(employees));
+  }
+
+  deleteEmployee(id: number) {
+    let employees: Employee[] = JSON.parse(localStorage.getItem(key) ?? '');
+    let index = employees.findIndex((x) => x.id == id);
+    employees.splice(index, 1);
     localStorage.setItem(key, JSON.stringify(employees));
   }
 }
