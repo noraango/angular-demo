@@ -4,7 +4,12 @@ import { computed, observable } from 'mobx-angular';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { FormatService } from 'src/app/services/format.service';
 import { Employee } from 'src/models/Employee';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 
 @Component({
   selector: 'app-employee',
@@ -43,7 +48,11 @@ export class EmployeeComponent implements OnInit {
   private _employeeService: EmployeeService;
   private _formatService: FormatService;
 
-  constructor(employeeService: EmployeeService, formatService: FormatService) {
+  constructor(
+    employeeService: EmployeeService,
+    formatService: FormatService,
+    public dialog: MatDialog
+  ) {
     this._employeeService = employeeService;
     this._formatService = formatService;
   }
@@ -69,7 +78,18 @@ export class EmployeeComponent implements OnInit {
   //Open dialog
   onRowClick(item: Employee) {
     console.log(item);
-    this.retrieveEmployees();
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      width: '500px',
+      data: {
+        id: item.id,
+        name: item.name,
+        salary: item.salary,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed!!');
+    });
   }
 
   //Pagination event handler
